@@ -1,0 +1,46 @@
+﻿body {
+}
+.showTable{
+    display:'';
+}
+.hideTable{
+    display:none;
+}
+#resultTable{
+    width:100%;
+    margin:5px 0px 5px 0px;
+}
+
+    #resultTable tbody td:nth-child(1) {
+        font-weight: bold;
+        padding: 3px 3px 3px 3px;
+    }
+
+    #resultTable tbody td:nth-child(2) {
+        font-weight: bolder;
+        padding: 3px 3px 3px 3px;
+    }
+.successResult {
+    border: 2px solid green;
+
+}
+.failedResult {
+    border: 2px solid red;
+}
+.successResult thead td {
+    font-weight: bolder;
+    background-color: palegreen;
+    padding: 3px;
+}
+
+.failedResult thead td {
+    font-weight: bolder;
+    background-color: lightsalmon;
+    padding:3px;
+}
+
+
+
+
+
+

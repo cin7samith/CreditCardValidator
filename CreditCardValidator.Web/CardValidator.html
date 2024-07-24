@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="Content/css/site.css" rel="stylesheet" />
+    <script src="Content/js/CardValidationResponse.js"></script>
+</head>
+<body>
+    <script>
+
+        function InitializeResultTable() {
+            document.getElementById("resultTable").className = "hideTable";
+            document.getElementById("ResultHeader").innerHTML = "";
+            document.getElementById("trCardType").style.display = "none"
+            document.getElementById("resultCardType").innerHTML = "";
+            document.getElementById("resultMessage").innerHTML = "";
+            document.getElementById("resultCreatedTime").innerHTML = "";
+        }
+        function validateCreditCartNo() {
+
+            InitializeResultTable();
+
+            var apiUrl = 'https://localhost:44320/api/validateCard';
+            var cardNumber = document.getElementById("txtCreditCardNumber").value;
+            var postData = {
+                CardNumber: cardNumber
+            };
+
+            // Configure the fetch() method to send a POST request
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' // Specify content type as JSON
+                },
+                body: JSON.stringify(postData) // Convert postData to JSON string
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle the response data
+                    let res = new CardValidationResponse(data.Success, data.Message, data.CardNumber, data.CardType, data.CreatedDateTime);
+                    if (res.Success == true) {
+                        document.getElementById("resultTable").className = "successResult";
+                        document.getElementById("ResultHeader").innerHTML = "Validation Passed";
+                       
+                    }
+                    else {
+                        document.getElementById("resultTable").className = "failedResult";
+                        document.getElementById("ResultHeader").innerHTML = "Validation Failed";
+
+                    }
+                    if (res.CardType !== "") {
+                        document.getElementById("trCardType").style.display = ""
+                        document.getElementById("resultCardType").innerHTML = res.CardType;
+                    }
+                    else {
+                        document.getElementById("trCardType").style.display = "none"
+                        document.getElementById("resultCardType").innerHTML = "";
+                    }
+                    document.getElementById("resultMessage").innerHTML = res.Message;
+                    let t = new Date(res.CreatedDateTime);
+                    document.getElementById("resultCreatedTime").innerHTML = res.CreatedDateTime;
+
+                    document.getElementById("resultTable"), className = "showTable"
+                    console.log('Success:', data);
+                    // Optionally update the UI or show a success message
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle errors and show an error message if needed
+                });
+
+        }
+
+    </script>
+    <div style="width:40%">
+        <fieldset>
+            <legend>Credit Card Validator</legend>
+            <input id="txtCreditCardNumber" type="text" value="4111111111111111" />
+            <button id="btnValidate" onclick="validateCreditCartNo()">Validate</button>
+            <button id="btnCancel">Cancel</button>
+            <br /><br />
+        </fieldset>
+
+
+        <div>
+            <table id="resultTable" class="hideTable">
+                <thead>
+                    <tr>
+                        <td id="ResultHeader" colspan="2">
+                            Validation Failed
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="trCardType">
+                        <td><div class="resultName">Card Type : </div></td>
+                        <td><div id="resultCardType">Visa</div></td>
+                    </tr>
+                    <tr>
+                        <td><div>Result : </div></td>
+                        <td><div id="resultMessage"> Invalid card Number</div></td>
+                    </tr>
+                    <tr>
+                        <td><div>Validated At : </div></td>
+                        <td><div id="resultCreatedTime">2024/07/19 12:19 PM</div></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            
+        </div>
+    </div>
+</body>
+</html>
