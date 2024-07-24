@@ -57,9 +57,7 @@ namespace CreditCardValidator.Business
                     Success = false
                 };
                 return cardValidationResponse;
-             }
-
-            //Add new line,With example
+             }           
         }
     }
 }
